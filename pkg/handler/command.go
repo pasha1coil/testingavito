@@ -8,16 +8,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// AddUser	godoc
+// AddUser			godoc
 //
-// @Summary	AddUser
-// @Description	create user
-// @Accept	json
-// @Produce	json
-// @Param	input 	body	segment.User 	true	"user info"
-// @Success	200	{integer}	integer 1
-// @Failure 500 {object} errorResponse
-// @Router /main/adduser [post]
+// @Summary			AddUser
+// @Description		create user
+// @Accept			json
+// @Produce			json
+// @Param			input body segment.User true "user info"
+// @Success			200 {integer} integer 1
+// @Failure			500 {object} errorResponse
+// @Router			/main/adduser [post]
 
 func (h *Handler) AddUser(c *gin.Context) {
 	var input segment.User
