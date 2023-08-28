@@ -30,7 +30,6 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		command.POST("/getusersegment", h.GetUsrSegm)
 		command.GET("/history", h.GetSlugHistoryCsv)
 	}
-	// go h.SearchTtl()
 	router.Static("/static", "./static")
 	//http://localhost:8080/swagger/index.html
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

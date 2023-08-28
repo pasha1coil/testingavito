@@ -8,16 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// AddUser			godoc
-//
-// @Summary			AddUser
-// @Description		create user
-// @Accept			json
-// @Produce			json
-// @Param			input body segment.User true "user info"
-// @Success			200 {integer} integer 1
-// @Failure			500 {object} errorResponse
-// @Router			/main/adduser [post]
+// AddUser godoc
+//	@Summary		Create a User
+//	@Description	Create User
+//	@Accept			json
+//	@Produce		json
+//	@Param			input body segment.User	true "User object"
+//	@Success		200		{integer}	int
+//	@Failure		500		{object}	newErrorResponse
+//	@Router			/main/adduser [post]
 
 func (h *Handler) AddUser(c *gin.Context) {
 	var input segment.User
@@ -36,15 +35,14 @@ func (h *Handler) AddUser(c *gin.Context) {
 }
 
 // AddSegm godoc
-//
-// @Summary AddSegm
-// @Description create slug
-// @Accept  json
-// @Produce  json
-// @Param input body segment.Segment true "slug info"
-// @Success 200 {integer} integer 1
-// @Failure 500 {object} errorResponse
-// @Router /main/addsegment [post]
+//	@Summary		Add a User
+//	@Description	Add User
+//	@Accept			json
+//	@Produce		json
+//	@Param			input body segment.Segment true	"User object"
+//	@Success		200		{integer}	int
+//	@Failure		500		{object}	newErrorResponse
+//	@Router			/main/addsegment [post]
 
 func (h *Handler) AddSegm(c *gin.Context) {
 	var input segment.Segment
@@ -63,15 +61,14 @@ func (h *Handler) AddSegm(c *gin.Context) {
 }
 
 // DelSegm godoc
-//
-// @Summary DelSegm
-// @Description delete slug
-// @Accept  json
-// @Produce  json
-// @Param input body segment.Segment true "slug info"
-// @Success 200 {integer} integer 1
-// @Failure 500 {object} errorResponse
-// @Router /main/delsegment [delete]
+//	@Summary		Delete a Slug
+//	@Description	Delete Slug
+//	@Accept			json
+//	@Produce		json
+//	@Param			input body segment.Segment	true "Slug object"
+//	@Success		200		{integer}	int
+//	@Failure		500		{object}	newErrorResponse
+//	@Router			/main/delsegment [delete]
 
 func (h *Handler) DelSegm(c *gin.Context) {
 	var input segment.Segment
@@ -90,15 +87,14 @@ func (h *Handler) DelSegm(c *gin.Context) {
 }
 
 // InsSegmUsr godoc
-//
-// @Summary InsSegmUsr
-// @Description insert slug to user
-// @Accept  json
-// @Produce  json
-// @Param input body segment.UserSegment true "slug and user info"
-// @Success 200 {integer} integer 1
-// @Failure 500 {object} errorResponse
-// @Router /main/insertsegmentuser [post]
+//	@Summary		Insert User a Slugs
+//	@Description	Insert User a Slugs
+//	@Accept			json
+//	@Produce		json
+//	@Param			input body segment.UserSegment	true "Slug and User objects"
+//	@Success		200		{integer}	int
+//	@Failure		500		{object}	newErrorResponse
+//	@Router			/main/insertsegmentuser [post]
 
 func (h *Handler) InsSegmUsr(c *gin.Context) {
 	var input segment.UserSegment
@@ -117,15 +113,14 @@ func (h *Handler) InsSegmUsr(c *gin.Context) {
 }
 
 // DelSegmUsr godoc
-//
-// @Summary DelSegmUsr
-// @Description delete slug to user
-// @Accept  json
-// @Produce  json
-// @Param input body segment.UserSegment true "slug and user info"
-// @Success 200 {integer} integer 1
-// @Failure 500 {object} errorResponse
-// @Router /main/delsegmentuser [delete]
+//	@Summary		Delete User a Slugs
+//	@Description	Delete User a Slugs
+//	@Accept			json
+//	@Produce		json
+//	@Param			input body segment.UserSegment	true "Slug and User objects"
+//	@Success		200		{integer}	int
+//	@Failure		500		{object}	newErrorResponse
+//	@Router			/main/delsegmentuser [delete]
 
 func (h *Handler) DelSegmUsr(c *gin.Context) {
 	var input segment.UserSegment
@@ -144,15 +139,14 @@ func (h *Handler) DelSegmUsr(c *gin.Context) {
 }
 
 // GetUsrSegm godoc
-//
-// @Summary GetUsrSegm
-// @Description get user slugs
-// @Accept  json
-// @Produce  json
-// @Param input body segment.User true "user info"
-// @Success 200 {integer} integer 1
-// @Failure 500 {object} errorResponse
-// @Router /main/getusersegment [post]
+//	@Summary		Get User a Slugs
+//	@Description	Get User a Slugs
+//	@Accept			json
+//	@Produce		json
+//	@Param			input body segment.User	true "User object"
+//	@Success		200		{integer}	int
+//	@Failure		500		{object}	newErrorResponse
+//	@Router			/main/getusersegment  [post]
 
 func (h *Handler) GetUsrSegm(c *gin.Context) {
 	var input segment.User
@@ -178,15 +172,14 @@ func (h *Handler) GetUsrSegm(c *gin.Context) {
 }
 
 // GetSlugHistoryCsv godoc
-//
-// @Summary GetSlugHistoryCsv
-// @Description get csv otchet for user slugs
-// @Accept  json
-// @Produce  json
-// @Param input body segment.GetHistory true "user info, start and end date YY/MM"
-// @Success 200 {integer} integer 1
-// @Failure 500 {object} errorResponse
-// @Router /main/history [get]
+//	@Summary		Get User History
+//	@Description	Get User History
+//	@Accept			json
+//	@Produce		json
+//	@Param			input body segment.GetHistory	true "User object"
+//	@Success		200		{integer}	int
+//	@Failure		500		{object}	newErrorResponse
+//	@Router			/main/history  [get]
 
 func (h *Handler) GetSlugHistoryCsv(c *gin.Context) {
 	var input segment.GetHistory

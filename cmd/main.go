@@ -17,12 +17,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-// @title			TestingAvito Slug App API
-// @version			1.0
-// @description		API Server for TestingAvito Slug Application
+// @title Testing Avito Api
+// @version 1.0
+// @description Testing Avito Api
 
-// @host			localhost:8080
-// @BasePath		/
+// @host localhost:8080
 
 func main() {
 
