@@ -5,10 +5,11 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	segment "testingavito"
-	"testingavito/pkg/handler"
-	"testingavito/pkg/repository"
-	"testingavito/pkg/service"
+
+	segment "github.com/pasha1coil/testingavito"
+	"github.com/pasha1coil/testingavito/pkg/handler"
+	"github.com/pasha1coil/testingavito/pkg/repository"
+	"github.com/pasha1coil/testingavito/pkg/service"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"

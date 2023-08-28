@@ -1,7 +1,7 @@
 package repository
 
 import (
-	segment "testingavito"
+	segment "github.com/pasha1coil/testingavito"
 
 	"github.com/jmoiron/sqlx"
 )

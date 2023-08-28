@@ -2,7 +2,8 @@ package handler
 
 import (
 	"net/http"
-	segment "testingavito"
+
+	segment "github.com/pasha1coil/testingavito"
 
 	"github.com/gin-gonic/gin"
 )

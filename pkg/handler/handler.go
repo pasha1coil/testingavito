@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"testingavito/pkg/service"
+	"github.com/pasha1coil/testingavito/pkg/service"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"

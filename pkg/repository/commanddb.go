@@ -2,8 +2,9 @@ package repository
 
 import (
 	"fmt"
-	segment "testingavito"
 	"time"
+
+	segment "github.com/pasha1coil/testingavito"
 
 	"github.com/jmoiron/sqlx"
 )
