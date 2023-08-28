@@ -1,8 +1,8 @@
 package service
 
 import (
-	segment "github.com/pasha1coil/testingavito"
 	"github.com/pasha1coil/testingavito/pkg/repository"
+	segment "github.com/pasha1coil/testingavito/pkg/service/segment"
 )
 
 type Commands interface {

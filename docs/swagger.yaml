@@ -1,4 +1,8 @@
+host: localhost:8080
 info:
   contact: {}
+  description: Testing Avito Api
+  title: Testing Avito Api
+  version: "1.0"
 paths: {}
 swagger: "2.0"

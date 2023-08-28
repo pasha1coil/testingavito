@@ -6,10 +6,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	segment "github.com/pasha1coil/testingavito"
 	"github.com/pasha1coil/testingavito/pkg/handler"
 	"github.com/pasha1coil/testingavito/pkg/repository"
 	"github.com/pasha1coil/testingavito/pkg/service"
+	segment "github.com/pasha1coil/testingavito/pkg/service/segment"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -17,11 +17,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-// @title Testing Avito Api
-// @version 1.0
-// @description Testing Avito Api
+//	@title			Testing Avito Api
+//	@version		1.0
+//	@description	Testing Avito Api
 
-// @host localhost:8080
+//	@host	localhost:8080
 
 func main() {
 

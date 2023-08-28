@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	segment "github.com/pasha1coil/testingavito"
 	"github.com/pasha1coil/testingavito/pkg/repository"
+	segment "github.com/pasha1coil/testingavito/pkg/service/segment"
 )
 
 type AddService struct {
