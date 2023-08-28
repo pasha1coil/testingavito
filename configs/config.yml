@@ -1,0 +1,7 @@
+port: "8080"
+db:
+    Host:   "localhost"
+    Port:   "5436"
+    Uname:  "postgres"
+    NameDB: "postgres"
+    SSL:    "disable"
