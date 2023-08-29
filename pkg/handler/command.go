@@ -3,20 +3,23 @@ package handler
 import (
 	"net/http"
 
-	segment "github.com/pasha1coil/testingavito/pkg/service/segment"
+	segment "github.com/pasha1coil/testingavito/pkg/service/internal"
 
 	"github.com/gin-gonic/gin"
 )
 
-// AddUser godoc
-//	@Summary		Create a User
-//	@Description	Create User
-//	@Accept			json
-//	@Produce		json
-//	@Param			input	body		segment.User	true	"User object"
-//	@Success		200		{integer}	int
-//	@Failure		500		{object}	newErrorResponse
-//	@Router			/main/adduser [post]
+// @Summary Add-User
+// @Tags Add-User
+// @Description create account
+// @ID Add-User
+// @Accept  json
+// @Produce  json
+// @Param input body segment.User true "account info"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /main/adduser [post]
 
 func (h *Handler) AddUser(c *gin.Context) {
 	var input segment.User

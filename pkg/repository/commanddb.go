@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	segment "github.com/pasha1coil/testingavito/pkg/service/segment"
+	segment "github.com/pasha1coil/testingavito/pkg/service/internal"
 
 	"github.com/jmoiron/sqlx"
 )
