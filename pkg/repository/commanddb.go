@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	segment "github.com/pasha1coil/testingavito/pkg/service/internal"
+	segment "github.com/pasha1coil/testingavito/pkg/service/enty"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -17,27 +17,90 @@ func NewAddDb(db *sqlx.DB) *AddDb {
 	return &AddDb{db: db}
 }
 
-func (r *AddDb) CreateUser(user segment.User) (int, error) {
-	var id int
+func (r *AddDb) CreateUser(user segment.User) (string, error) {
+	var message string
+	if user.User_number <= 0 {
+		return "User number must >0", nil
+	}
 	query := fmt.Sprintf("INSERT INTO %s (User_number) values ($1) RETURNING User_number", Users)
 	row := r.db.QueryRow(query, user.User_number)
-	if err := row.Scan(&id); err != nil {
-		return 0, err
+	if err := row.Scan(&message); err != nil {
+		return "", err
 	}
-	return id, nil
+	return message, nil
 }
 
-func (r *AddDb) CreateSegment(segment segment.Segment) (string, error) {
+// func (r *AddDb) CreateSegment(segment segment.Segment) (string, error) {
+// 	var name string
+// 	query := fmt.Sprintf("INSERT INTO %s (slug_name) values ($1) RETURNING slug_name", slugs)
+// 	row := r.db.QueryRow(query, segment.Name)
+// 	if err := row.Scan(&name); err != nil {
+// 		return "", err
+// 	}
+// 	return name, nil
+// }
+
+func (r *AddDb) CreateSegment(namesegment segment.Segment) (string, error) {
 	var name string
+	var id = []segment.Segment{}
 	query := fmt.Sprintf("INSERT INTO %s (slug_name) values ($1) RETURNING slug_name", slugs)
-	row := r.db.QueryRow(query, segment.Name)
+	row := r.db.QueryRow(query, namesegment.Name)
 	if err := row.Scan(&name); err != nil {
 		return "", err
+	}
+	if namesegment.Percent > 0 {
+		query := fmt.Sprintf("SELECT user_number FROM %s", Users)
+		row, err := r.db.Query(query)
+		if err != nil {
+			return "", err
+		}
+		for row.Next() {
+			var s segment.Segment
+			if err := row.Scan(&s.ID); err != nil {
+				return "", err
+			}
+			id = append(id, s)
+		}
+		fmt.Println(len(id))
+		if len(id) > 1 {
+			//fmt.Println(namesegment.Percent)
+			// var line,
+			count := float64(len(id)) * float64((namesegment.Percent / 100.0))
+			fmt.Println(count)
+			if count <= 1 {
+				err := r.InsertSemUser2(namesegment, id[0])
+				if err != nil {
+					return "", err
+				}
+			} else {
+				for j := 0; j < int(count); j++ {
+					err := r.InsertSemUser2(namesegment, id[j])
+					if err != nil {
+						return "", err
+					}
+				}
+			}
+		} else if len(id) == 0 {
+			r.DelSegment(namesegment)
+			return "Add User,pls", nil
+		} else {
+			err := r.InsertSemUser2(namesegment, id[0])
+			if err != nil {
+				return "", err
+			}
+		}
+	} else if namesegment.Percent < 0 {
+		r.DelSegment(namesegment)
+		return "Fix Percent ,pls", nil
 	}
 	return name, nil
 }
 
 func (r *AddDb) DelSegment(segment segment.Segment) (bool, error) {
+	res := r.AddInHistory2(segment)
+	if res != nil {
+		return false, res
+	}
 	query1 := fmt.Sprintf("DELETE FROM %s WHERE name_slug=($1)", UsersSlug)
 	_, err := r.db.Exec(query1, segment.Name)
 	if err != nil {
@@ -71,6 +134,23 @@ func (r *AddDb) InsertSemUser(NameSegment []string, UserID int) ([]int, error) {
 		}
 	}
 	return id, nil
+}
+
+func (r *AddDb) InsertSemUser2(NameSegment segment.Segment, UserID segment.Segment) error {
+	query := fmt.Sprintf("DELETE FROM %s WHERE name_slug=($1) AND UserID = ($2)", UsersSlug)
+	_, err := r.db.Exec(query, NameSegment.Name, UserID.ID)
+	if err != nil {
+		return err
+	}
+	query = fmt.Sprintf("INSERT INTO %s (name_slug,UserID) values ($1,$2) RETURNING id", UsersSlug)
+	_, err = r.db.Exec(query, NameSegment.Name, UserID.ID)
+	if err != nil {
+		return err
+	}
+	if r.AddInHistory(NameSegment.Name, UserID.ID, "ADD"); err != nil {
+		return err
+	}
+	return nil
 }
 
 //DeleteSemUser
@@ -158,4 +238,36 @@ func (r *AddDb) GetSlugHistory(userId int, startDate string, endDate string) ([]
 		return nil, err
 	}
 	return slugHistory, nil
+}
+
+func (r *AddDb) AddInHistory2(NameSegment segment.Segment) error {
+	mode := "DELETE"
+	var id = []segment.Segment{}
+	query := fmt.Sprintf("SELECT userid FROM %s WHERE name_slug=($1)", History)
+	row, err := r.db.Query(query, NameSegment.Name)
+	if err != nil {
+		return err
+	}
+	for row.Next() {
+		var s segment.Segment
+		if err := row.Scan(&s.ID); err != nil {
+			return err
+		}
+		id = append(id, s)
+	}
+	fmt.Println(id)
+	for _, i := range id {
+		query = fmt.Sprintf("DELETE FROM %s WHERE name_slug=($1) AND UserID = ($2) AND mode = ($3)", History)
+		_, err = r.db.Exec(query, NameSegment.Name, i.ID, mode)
+		if err != nil {
+			return err
+		}
+
+		query = fmt.Sprintf("INSERT INTO %s (name_slug,UserID,mode,created) values ($1,$2,$3,$4)", History)
+		_, err = r.db.Exec(query, NameSegment.Name, i.ID, mode, time.Now())
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

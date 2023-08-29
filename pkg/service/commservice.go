@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/pasha1coil/testingavito/pkg/repository"
-	segment "github.com/pasha1coil/testingavito/pkg/service/internal"
+	segment "github.com/pasha1coil/testingavito/pkg/service/enty"
 )
 
 type AddService struct {
@@ -17,7 +17,7 @@ func NewAddService(repo repository.Commands) *AddService {
 	return &AddService{repo: repo}
 }
 
-func (a *AddService) CreateUser(user segment.User) (int, error) {
+func (a *AddService) CreateUser(user segment.User) (string, error) {
 	return a.repo.CreateUser(user)
 }
 

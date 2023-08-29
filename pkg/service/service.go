@@ -2,11 +2,13 @@ package service
 
 import (
 	"github.com/pasha1coil/testingavito/pkg/repository"
-	segment "github.com/pasha1coil/testingavito/pkg/service/segment"
+	segment "github.com/pasha1coil/testingavito/pkg/service/enty"
 )
 
+//go:generate mockgen -source=service.go -destination=mocks/mock.go
+
 type Commands interface {
-	CreateUser(user segment.User) (int, error)
+	CreateUser(user segment.User) (string, error)
 	CreateSegment(segment segment.Segment) (string, error)
 	DelSegment(segment segment.Segment) (bool, error)
 	InsertSemUser(NameSegment []string, UserID int) ([]int, error)

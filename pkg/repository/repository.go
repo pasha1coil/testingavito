@@ -1,13 +1,13 @@
 package repository
 
 import (
-	segment "github.com/pasha1coil/testingavito/pkg/service/internal"
+	segment "github.com/pasha1coil/testingavito/pkg/service/enty"
 
 	"github.com/jmoiron/sqlx"
 )
 
 type Commands interface {
-	CreateUser(user segment.User) (int, error)
+	CreateUser(user segment.User) (string, error)
 	CreateSegment(segment segment.Segment) (string, error)
 	DelSegment(segment segment.Segment) (bool, error)
 	InsertSemUser(NameSegment []string, UserID int) ([]int, error)

@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 
-	segment "github.com/pasha1coil/testingavito/pkg/service/internal"
+	segment "github.com/pasha1coil/testingavito/pkg/service/enty"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,7 +33,7 @@ func (h *Handler) AddUser(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"UserNumber": id,
+		"Message": id,
 	})
 }
 
@@ -59,7 +59,7 @@ func (h *Handler) AddSegm(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"SlagName": id,
+		"Message": id,
 	})
 }
 
@@ -168,7 +168,7 @@ func (h *Handler) GetUsrSegm(c *gin.Context) {
 		})
 	} else {
 		c.JSON(http.StatusOK, map[string]interface{}{
-			"Names": "не имеет сегментов",
+			"Message": "has no segments or non-existent user entered",
 		})
 	}
 

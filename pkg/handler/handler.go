@@ -4,7 +4,6 @@ import (
 	"github.com/pasha1coil/testingavito/pkg/service"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/pasha1coil/testingavito/docs"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
