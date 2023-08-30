@@ -1,16 +1,16 @@
 FROM golang:latest
 
-WORKDIR /app
-
-COPY . .
-
+RUN go version
 ENV GOPATH=/
 
-EXPOSE 8080
+COPY ./ ./
 
+# install psql
+RUN apt-get update
+RUN apt-get -y install postgresql-client
+
+# build go app
 RUN go mod download
-RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
-RUN go test ./pkg/...
-RUN go build -o testingavito cmd/main.go
+RUN go build -o testingavito ./cmd/main.go
 
 CMD ["./testingavito"]

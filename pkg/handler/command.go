@@ -131,13 +131,13 @@ func (h *Handler) DelSegmUsr(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	_, err := h.services.DeleteSemUser(input.NameSegment, input.UserID)
+	result, err := h.services.DeleteSemUser(input.NameSegment, input.UserID)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"Status": "OK",
+		"Status": result,
 	})
 }
 
@@ -200,4 +200,29 @@ func (h *Handler) GetSlugHistoryCsv(c *gin.Context) {
 	c.Header("Content-Type", "text/csv; charset=utf-8")
 
 	c.String(http.StatusOK, csv)
+}
+
+func (h *Handler) Showdatadb(c *gin.Context) {
+	var input segment.DataBase
+	if err := c.BindJSON(&input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	array, err := h.services.Tableinitialization(input)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.Header("Content-Type", "text/csv; charset=utf-8")
+	if len(array) > 0 {
+		c.JSON(http.StatusOK, map[string]interface{}{
+			"Status": array,
+		})
+	} else {
+		c.JSON(http.StatusOK, map[string]interface{}{
+			"Status": "Nil result",
+		})
+	}
 }

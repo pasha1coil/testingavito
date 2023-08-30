@@ -25,7 +25,7 @@ func (a *AddService) CreateSegment(segment segment.Segment) (string, error) {
 	return a.repo.CreateSegment(segment)
 }
 
-func (a *AddService) DelSegment(segment segment.Segment) (bool, error) {
+func (a *AddService) DelSegment(segment segment.Segment) (string, error) {
 	return a.repo.DelSegment(segment)
 }
 
@@ -33,7 +33,7 @@ func (a *AddService) InsertSemUser(NameSegment []string, UserID int) ([]int, err
 	return a.repo.InsertSemUser(NameSegment, UserID)
 }
 
-func (a *AddService) DeleteSemUser(NameSegment []string, UserID int) (bool, error) {
+func (a *AddService) DeleteSemUser(NameSegment []string, UserID int) (string, error) {
 	return a.repo.DeleteSemUser(NameSegment, UserID)
 }
 
@@ -69,4 +69,10 @@ func (a *AddService) GetCsvHistory(userId int, startDate string, endDate string)
 	}
 	url := "http://localhost:8080/" + file
 	return url, nil
+}
+
+//Tableinitialization(name segment.DataBase) ([]segment.DbOutput, error)
+
+func (a *AddService) Tableinitialization(name segment.DataBase) ([]segment.DbOutput, error) {
+	return a.repo.Tableinitialization(name)
 }

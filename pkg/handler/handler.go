@@ -28,6 +28,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		command.DELETE("/delsegmentuser", h.DelSegmUsr)
 		command.POST("/getusersegment", h.GetUsrSegm)
 		command.GET("/history", h.GetSlugHistoryCsv)
+		command.GET("/showdatadb", h.Showdatadb)
 	}
 	router.Static("/static", "./static")
 	//http://localhost:8080/swagger/index.html

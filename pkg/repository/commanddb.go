@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	segment "github.com/pasha1coil/testingavito/pkg/service/enty"
@@ -61,12 +62,8 @@ func (r *AddDb) CreateSegment(namesegment segment.Segment) (string, error) {
 			}
 			id = append(id, s)
 		}
-		fmt.Println(len(id))
 		if len(id) > 1 {
-			//fmt.Println(namesegment.Percent)
-			// var line,
 			count := float64(len(id)) * float64((namesegment.Percent / 100.0))
-			fmt.Println(count)
 			if count <= 1 {
 				err := r.InsertSemUser2(namesegment, id[0])
 				if err != nil {
@@ -96,22 +93,55 @@ func (r *AddDb) CreateSegment(namesegment segment.Segment) (string, error) {
 	return name, nil
 }
 
-func (r *AddDb) DelSegment(segment segment.Segment) (bool, error) {
-	res := r.AddInHistory2(segment)
-	if res != nil {
-		return false, res
-	}
-	query1 := fmt.Sprintf("DELETE FROM %s WHERE name_slug=($1)", UsersSlug)
-	_, err := r.db.Exec(query1, segment.Name)
+// res := r.AddInHistory2(segment)
+// 	if res != nil {
+// 		return false, res
+// 	}
+// 	query1 := fmt.Sprintf("DELETE FROM %s WHERE name_slug=($1)", UsersSlug)
+// 	_, err := r.db.Exec(query1, segment.Name)
+// 	if err != nil {
+// 		return false, err
+// 	}
+// 	query2 := fmt.Sprintf("DELETE FROM %s WHERE slug_name=($1)", slugs)
+// 	_, err = r.db.Exec(query2, segment.Name)
+// 	if err != nil {
+// 		return false, err
+// 	}
+// 	return true, nil
+
+func (r *AddDb) DelSegment(slug segment.Segment) (string, error) {
+	var array = []segment.ListNames{}
+	rows, err := r.db.Query("SELECT slug_name FROM slugs WHERE slug_name=($1)", slug.Name)
 	if err != nil {
-		return false, err
+		return "", err
 	}
-	query2 := fmt.Sprintf("DELETE FROM %s WHERE slug_name=($1)", slugs)
-	_, err = r.db.Exec(query2, segment.Name)
-	if err != nil {
-		return false, err
+	defer rows.Close()
+	for rows.Next() {
+		var s segment.ListNames
+		if err := rows.Scan(&s.Name); err != nil {
+			return "", err
+		}
+		array = append(array, s)
 	}
-	return true, nil
+	if len(array) > 0 {
+		res := r.AddInHistory2(slug)
+		if res != nil {
+			return "", res
+		}
+		query1 := fmt.Sprintf("DELETE FROM %s WHERE name_slug=($1)", UsersSlug)
+		_, err := r.db.Exec(query1, slug.Name)
+		if err != nil {
+			return "", err
+		}
+		query2 := fmt.Sprintf("DELETE FROM %s WHERE slug_name=($1)", slugs)
+		_, err = r.db.Exec(query2, slug.Name)
+		if err != nil {
+			return "", err
+		}
+	} else {
+		return "No such data", nil
+	}
+	return "OK", nil
 }
 
 func (r *AddDb) InsertSemUser(NameSegment []string, UserID int) ([]int, error) {
@@ -155,27 +185,41 @@ func (r *AddDb) InsertSemUser2(NameSegment segment.Segment, UserID segment.Segme
 
 //DeleteSemUser
 
-func (r *AddDb) DeleteSemUser(NameSegment []string, UserID int) (bool, error) {
-	var id int
-	for _, i := range NameSegment {
+func (r *AddDb) DeleteSemUser(NameSegment []string, UserID int) (string, error) {
+	var id = []segment.TableSlugs{}
+	if len(NameSegment) > 0 {
+		for _, i := range NameSegment {
 
-		query := fmt.Sprintf("SELECT id FROM %s WHERE name_slug=($1) AND UserID= ($2)", UsersSlug)
-		row := r.db.QueryRow(query, i, UserID)
-		if err := row.Scan(&id); err != nil {
-			continue
-		}
-		if id != 0 {
-			r.AddInHistory(i, UserID, "DELETE")
-			query := fmt.Sprintf("DELETE FROM %s WHERE name_slug=($1) AND UserID= ($2)", UsersSlug)
-			_, err := r.db.Exec(query, i, UserID)
+			rows, err := r.db.Query("SELECT id FROM UsersSlug WHERE name_slug=($1) AND UserID= ($2)", i, UserID)
 			if err != nil {
-				return false, err
+				return "", err
+			}
+			defer rows.Close()
+			for rows.Next() {
+				var s segment.TableSlugs
+				if err := rows.Scan(&s.ID); err != nil {
+					return "", err
+				}
+				id = append(id, s)
+			}
+		}
+		if len(id) > 0 {
+			for _, i := range NameSegment {
+
+				r.AddInHistory(i, UserID, "DELETE")
+				query := fmt.Sprintf("DELETE FROM %s WHERE name_slug=($1) AND UserID= ($2)", UsersSlug)
+				_, err := r.db.Exec(query, i, UserID)
+				if err != nil {
+					return "", err
+				}
 			}
 		} else {
-			return false, nil
+			return "no such data", nil
 		}
+	} else {
+		return "Empty list value", nil
 	}
-	return true, nil
+	return "OK", nil
 }
 
 // GetActiveSlugs
@@ -217,7 +261,6 @@ func (r *AddDb) GetSlugHistory(userId int, startDate string, endDate string) ([]
 	NewstartDate := s.Format("2006-01-02")
 	d, _ := time.Parse(layout, endDate+"/02")
 	NewendDate := d.Format("2006-01-02")
-	fmt.Println(NewstartDate, NewendDate)
 	rows, err := r.db.Query("SELECT UserID, name_slug, mode, created FROM History WHERE UserID=($1) AND created >= ($2) AND created <= ($3)",
 		userId, NewstartDate, NewendDate)
 	if err != nil {
@@ -255,7 +298,6 @@ func (r *AddDb) AddInHistory2(NameSegment segment.Segment) error {
 		}
 		id = append(id, s)
 	}
-	fmt.Println(id)
 	for _, i := range id {
 		query = fmt.Sprintf("DELETE FROM %s WHERE name_slug=($1) AND UserID = ($2) AND mode = ($3)", History)
 		_, err = r.db.Exec(query, NameSegment.Name, i.ID, mode)
@@ -270,4 +312,65 @@ func (r *AddDb) AddInHistory2(NameSegment segment.Segment) error {
 		}
 	}
 	return nil
+}
+
+func (r *AddDb) Tableinitialization(name segment.DataBase) ([]segment.DbOutput, error) {
+	var array = []segment.DbOutput{}
+	name.Name = strings.ToLower(name.Name)
+	if name.Name == "users" {
+		rows, err := r.db.Query("SELECT * FROM Users")
+		if err != nil {
+			return array, err
+		}
+		defer rows.Close()
+		for rows.Next() {
+			var s segment.DbOutput
+			if err := rows.Scan(&s.User_id); err != nil {
+				return array, err
+			}
+			array = append(array, s)
+		}
+	} else if name.Name == "slugs" {
+		rows, err := r.db.Query("SELECT * FROM slugs")
+		if err != nil {
+			return array, err
+		}
+		defer rows.Close()
+		for rows.Next() {
+			var s segment.DbOutput
+			if err := rows.Scan(&s.Name); err != nil {
+				return array, err
+			}
+			array = append(array, s)
+		}
+	} else if name.Name == "usersslug" {
+		rows, err := r.db.Query("SELECT * FROM UsersSlug")
+		if err != nil {
+			return array, err
+		}
+		defer rows.Close()
+		for rows.Next() {
+			var s segment.DbOutput
+			if err := rows.Scan(&s.ID, &s.User_id, &s.Name); err != nil {
+				return array, err
+			}
+			array = append(array, s)
+		}
+	} else if name.Name == "history" {
+		rows, err := r.db.Query("SELECT * FROM History")
+		if err != nil {
+			return array, err
+		}
+		defer rows.Close()
+		for rows.Next() {
+			var s segment.DbOutput
+			if err := rows.Scan(&s.ID, &s.User_id, &s.Name, &s.Mode, &s.Created); err != nil {
+				return array, err
+			}
+			array = append(array, s)
+		}
+	} else {
+		return array, nil
+	}
+	return array, nil
 }

@@ -12,6 +12,10 @@ type UserSegment struct {
 	UserID      int      `json:"userid" binding:"required"`
 }
 
+type TableSlugs struct {
+	ID int
+}
+
 type ListNames struct {
 	Name string `json:"name"`
 }
