@@ -21,7 +21,7 @@ func NewAddDb(db *sqlx.DB) *AddDb {
 func (r *AddDb) CreateUser(user segment.User) (string, error) {
 	var message string
 	if user.User_number <= 0 {
-		return "User number must >0", nil
+		return "User number must > 0", nil
 	}
 	query := fmt.Sprintf("INSERT INTO %s (User_number) values ($1) RETURNING User_number", Users)
 	row := r.db.QueryRow(query, user.User_number)
@@ -214,7 +214,7 @@ func (r *AddDb) DeleteSemUser(NameSegment []string, UserID int) (string, error) 
 				}
 			}
 		} else {
-			return "no such data", nil
+			return "No such data", nil
 		}
 	} else {
 		return "Empty list value", nil

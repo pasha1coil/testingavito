@@ -18,7 +18,7 @@ services:
     - ./.database/postgres/data:/var/lib/postgres/data
     environment:
       POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "qwerty"
+      POSTGRES_PASSWORD: ${DB_PASS}
       POSTGRES_DB: "avito-db"
     ports:
       - 5432:5432
