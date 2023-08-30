@@ -110,7 +110,7 @@
 
 Примеры запросов и ответов:
 1. Создать пользователя (корректный запрос) http://localhost:8080/main/adduser POST:
-  INPUT
+  - INPUT
   ```json
   {
     "user_number":1
