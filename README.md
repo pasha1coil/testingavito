@@ -44,9 +44,7 @@
 Оригинальное задание -> https://github.com/avito-tech/backend-trainee-assignment-2023 
 
 Структура проекта выглядит следующим образом:
-```markdown
-├── build
-|   └── config.yml                      
+```markdown                     
 ├── cmd
 |   └── main.go                         
 ├── configs
@@ -83,7 +81,7 @@
 |   └── 000001_init.up.sql
 |
 ├── static
-|   
+|   └── text.txt
 |        
 ├── .env          
 ├── .gitignore
