@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/pasha1coil/testingavito/pkg/repository"
-	segment "github.com/pasha1coil/testingavito/pkg/service/enty"
+	segment "github.com/pasha1coil/testingavito/pkg/service/system"
 )
 
 type AddService struct {

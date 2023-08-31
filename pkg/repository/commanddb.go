@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	segment "github.com/pasha1coil/testingavito/pkg/service/enty"
+	segment "github.com/pasha1coil/testingavito/pkg/service/system"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -49,7 +49,7 @@ func (r *AddDb) CreateSegment(namesegment segment.Segment) (string, error) {
 	if err := row.Scan(&name); err != nil {
 		return "", err
 	}
-	if namesegment.Percent > 0 {
+	if namesegment.Percent > 0 && namesegment.Percent <= 100 {
 		query := fmt.Sprintf("SELECT user_number FROM %s", Users)
 		row, err := r.db.Query(query)
 		if err != nil {
@@ -86,9 +86,11 @@ func (r *AddDb) CreateSegment(namesegment segment.Segment) (string, error) {
 				return "", err
 			}
 		}
-	} else if namesegment.Percent < 0 {
+	} else if namesegment.Percent < 0 || namesegment.Percent > 100 {
 		r.DelSegment(namesegment)
 		return "Fix Percent ,pls", nil
+	} else {
+		return name, nil
 	}
 	return name, nil
 }
