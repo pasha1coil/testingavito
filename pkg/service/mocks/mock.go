@@ -8,7 +8,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	enty "github.com/pasha1coil/testingavito/pkg/service/enty"
+	enty "github.com/pasha1coil/testingavito/pkg/service/system"
 )
 
 // MockCommands is a mock of Commands interface.
